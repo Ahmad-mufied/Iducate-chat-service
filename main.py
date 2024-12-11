@@ -371,10 +371,12 @@ async def chat_with_the_model(
         ),
     )
 
+# get port from environment variable
+port = os.getenv('PORT', 8000)
 
 if __name__ == "__main__":
     # Run the FastAPI app using uvicorn when running locally
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
 else:
     # Use Mangum to handle requests for AWS Lambda (serverless deployment)
     handler = Mangum(app, lifespan="off")
