@@ -316,7 +316,7 @@ async def chat_with_the_model(
     # get sub (user_id) from token
     user_id = get_user_id(id_token)
 
-    if chat_id is None:
+    if chat_id is None or chat_id == "":
         # Generate a new chat session
         chat_id = uuid.uuid4()
         title = generate_title(prompt)
