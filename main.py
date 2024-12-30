@@ -34,21 +34,20 @@ app = FastAPI(
     version="0.0.1"
 )
 
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:3000",
-]
+origins = ["*",
+           "http://localhost.tiangolo.com",
+           "https://localhost.tiangolo.com",
+           "http://localhost",
+           "http://localhost:3000",
+           ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["id_token", "*"],  # Explicitly add 'id_token'
+    allow_headers=["id_token", 'Content-Type', 'Authorization', "*"],  # Explicitly add 'id_token'
 )
-
 
 # Load specific environment file
 env_file = os.getenv('ENV', '.env')
@@ -100,6 +99,7 @@ class DetailedHeaderLoggingMiddleware(BaseHTTPMiddleware):
 
         return response
 
+
 class CustomCORSMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         # Check if the request is an OPTIONS request
@@ -110,7 +110,7 @@ class CustomCORSMiddleware(BaseHTTPMiddleware):
                 headers={
                     "Access-Control-Allow-Origin": "*",  # Adjust to your needs
                     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                    "Access-Control-Allow-Headers": "id_token, Content-Type",  # Custom headers
+                    "Access-Control-Allow-Headers": "id_token, Content-Type, Authorization",  # Custom headers
                 },
             )
 
@@ -119,9 +119,8 @@ class CustomCORSMiddleware(BaseHTTPMiddleware):
         # You can also add headers to non-OPTIONS requests if needed
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "id_token, Content-Type"
+        response.headers["Access-Control-Allow-Headers"] = "id_token, Content-Type, Authorization"
         return response
-
 
 
 app.add_middleware(DetailedHeaderLoggingMiddleware)
@@ -179,7 +178,7 @@ class ChatInput(BaseModel):
     Represents the input for initiating or continuing a chat session.
     """
     prompt: str = Field(..., example="Hello!")  # User's message
-    chat_id: uuid.UUID | None = Field(
+    chat_id: uuid.UUID | None | str = Field(
         default=None,
         description="A unique identifier for the chat session. This ID is generated when a new chat session is created and is used to retrieve and continue the chat session in future requests.",
         examples=["12345678-1234-5678-1234-567812345678"]
@@ -370,6 +369,7 @@ async def chat_with_the_model(
             updated_at=chat.updated_at
         ),
     )
+
 
 # get port from environment variable
 port = os.getenv('PORT', 8000)
