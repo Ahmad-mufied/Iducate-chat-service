@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ChatFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./package
+      Handler: main.lambda_handler
+      Runtime: python3.9
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          AGENT_ID: !Ref AgentId
+          AGENT_ALIAS_ID: !Ref AgentAliasId
+          DYNAMODB_TABLE: !Ref ChatTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ChatTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:*
+              Resource: '*'
+      Events:
+        ChatAPI:
+          Type: Api
+          Properties:
+            Path: /chat
+            Method: post
+
+  ChatTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: test-chat
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: user_id
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+
+Parameters:
+  AgentId:
+    Type: String
+    Description: AWS Bedrock Agent ID
+  
+  AgentAliasId:
+    Type: String
+    Description: AWS Bedrock Agent Alias ID
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/chat" 

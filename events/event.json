@@ -1,0 +1,11 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /chat",
+  "rawPath": "/chat",
+  "rawQueryString": "",
+  "headers": {
+    "Content-Type": "application/json",
+    "id_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXItaWQiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuYW1lIjoidGVzdC11c2VyIn0.sample-signature"
+  },
+  "body": "{\"prompt\":\"Hello, how are you?\",\"chat_id\":\"test-chat-123\"}"
+} 

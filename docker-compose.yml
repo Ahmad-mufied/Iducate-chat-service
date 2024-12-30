@@ -1,35 +1,20 @@
-version: "3.8"
-
+version: '3.8'
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  dynamodb-local:
+    image: amazon/dynamodb-local
     ports:
-      - "${PORT}:${PORT}"  # Use the PORT variable from the .env file
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+    
+  sam-local:
+    image: amazon/aws-sam-cli
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /app
     environment:
-      - PORT=${PORT}  # Use the PORT variable from the .env file
-    env_file:
-      - .env  # Load environment variables from the .env file
-
-    # If your app depends on a database, you can define that service here as well
-    # Example:
-    # depends_on:
-    #   - db
-
-    networks:
-      - app-network
-
-  # Example: You can add other services here, e.g., a database
-  # db:
-  #   image: postgres
-  #   environment:
-  #     - POSTGRES_USER=example
-  #     - POSTGRES_PASSWORD=example
-  #     - POSTGRES_DB=example_db
-  #   networks:
-  #     - app-network
-
-networks:
-  app-network:
-    driver: bridge
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - AWS_DEFAULT_REGION=us-east-1
+    depends_on:
+      - dynamodb-local 

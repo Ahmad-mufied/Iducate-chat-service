@@ -1,0 +1,14 @@
+Collecting pydantic
+  Using cached pydantic-2.10.4-py3-none-any.whl.metadata (29 kB)
+Collecting annotated-types>=0.6.0 (from pydantic)
+  Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.27.2 (from pydantic)
+  Using cached pydantic_core-2.27.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Collecting typing-extensions>=4.12.2 (from pydantic)
+  Using cached typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+Using cached pydantic-2.10.4-py3-none-any.whl (431 kB)
+Using cached pydantic_core-2.27.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.0 MB)
+Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Using cached typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+Installing collected packages: typing-extensions, annotated-types, pydantic-core, pydantic
+Successfully installed annotated-types-0.7.0 pydantic-2.10.4 pydantic-core-2.27.2 typing-extensions-4.12.2
